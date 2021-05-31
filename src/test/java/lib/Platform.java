@@ -87,6 +87,7 @@ public class Platform {
 
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("window-size=340,640");
+        chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
 
         return chromeOptions;
     }

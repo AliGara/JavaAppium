@@ -17,7 +17,7 @@ public class MyListsTest extends CoreTestCase {
 
 
     @Test
-    public void testSaveFirstArticleToMyList () {
+    public void testSaveFirstArticleToMyList () throws InterruptedException {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -33,6 +33,7 @@ public class MyListsTest extends CoreTestCase {
             ArticlePageObject.addArticlesToMySaved();
         }
         if (Platform.getInstance().isMW()){
+            Thread.sleep(1000);
             AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
             Auth.clickAuthButton();
             Auth.enterLoginData(login, password);
@@ -46,7 +47,6 @@ public class MyListsTest extends CoreTestCase {
             );
 
             ArticlePageObject.addArticlesToMySaved();
-
         }
 
         ArticlePageObject.closeArticle();

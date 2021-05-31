@@ -58,7 +58,7 @@ abstract public class MyListsPageObject extends MainPageObject{
             String remove_locator = getRemoveButtonByTitle(article_title);
             this.waitForElementAndClick(
                     remove_locator,
-                    "Cannot click button to removearticle from saved",
+                    "Cannot click button to remove article from saved",
                     10
             );
         }

@@ -16,9 +16,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomeWork4_5 extends CoreTestCase {
     private static final String name_of_folder = "Learning programming for automation";
+    private static final String
+            login = "Alinka nsk",
+            password = "!2wsxzaQ";
 
     @Test
-    public void testSaveTwoArticlesToMyList() {
+    public void testSaveTwoArticlesToMyList() throws InterruptedException {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
@@ -34,6 +37,22 @@ public class HomeWork4_5 extends CoreTestCase {
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addArticleToMyList(name_of_folder);
         } else {
+            ArticlePageObject.addArticlesToMySaved();
+        }
+
+        if (Platform.getInstance().isMW()){
+            Thread.sleep(1000);
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+
+            ArticlePageObject.waitForTitleElement();
+            assertEquals("We are not on the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle()
+            );
+
             ArticlePageObject.addArticlesToMySaved();
         }
 
@@ -67,6 +86,7 @@ public class HomeWork4_5 extends CoreTestCase {
         }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.setOpenNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
@@ -89,9 +109,15 @@ public class HomeWork4_5 extends CoreTestCase {
                     "No second article found after deletion",
                     5
             );
-        } else {
+        } else if (Platform.getInstance().isAndroid()){
             MainPageObject.waitForElementPresent(
                     "xpath://*[@text='general-purpose programming language']",
+                    "No second article found after deletion",
+                    5
+            );
+        } else {
+            MainPageObject.waitForElementPresent(
+                    "xpath://div//a[text()='Fbergo']",
                     "No second article found after deletion",
                     5
             );
