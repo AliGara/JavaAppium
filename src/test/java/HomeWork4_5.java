@@ -6,6 +6,7 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -28,7 +29,7 @@ public class HomeWork4_5 extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = ArticlePageObject.getArticleTitle();
-        assertEquals(
+        Assert.assertEquals(
                 "Cannot find article title (Java)",
                 "Java (programming language)",
                 article_title
@@ -41,14 +42,14 @@ public class HomeWork4_5 extends CoreTestCase {
         }
 
         if (Platform.getInstance().isMW()){
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
             Auth.clickAuthButton();
             Auth.enterLoginData(login, password);
             Auth.submitForm();
 
             ArticlePageObject.waitForTitleElement();
-            assertEquals("We are not on the same page after login",
+            Assert.assertEquals("We are not on the same page after login",
                     article_title,
                     ArticlePageObject.getArticleTitle()
             );

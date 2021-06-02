@@ -3,32 +3,30 @@ package lib;
 import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
 import lib.ui.WelcomePageObject;
+import org.junit.After;
+import org.junit.Before;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.time.Duration;
 
-public class CoreTestCase extends TestCase {
+public class CoreTestCase {
 
     protected RemoteWebDriver driver;
 
-    //Before
-    @Override // Показываем, что перегружаем родительский метод setUp
-    protected void setUp() throws Exception {
 
-        super.setUp();
+    @Before // Показываем, что перегружаем родительский метод setUp
+    public void setUp() throws Exception {
+
         driver = Platform.getInstance().getDriver();
         this.rotateScreenPortrait();
         this.skipWelcomePageForIOSApp();
         this.openWikiWebPageForMobileWeb();
     }
 
-    //After
-    @Override // Показываем, что перегружаем родительский метод tearDown
-    protected void tearDown() throws Exception {
+    @After // Показываем, что перегружаем родительский метод tearDown
+    public void tearDown () {
         driver.quit();
-
-        super.tearDown();
     }
 
     protected void rotateScreenPortrait() {
