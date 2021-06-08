@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -29,12 +30,15 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
     /* TEMPLATES METHODS */
 
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(TITLE, "Cannot find article title on page", 15);
     }
 
+    @Step("Get article title")
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
+        screenshot(this.takeScreenshot("article_title"));
         if (Platform.getInstance().isMW()){
             return title_element.getText();
         } else {
@@ -42,6 +46,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step("Swiping to footer on article page")
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(
@@ -63,6 +68,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step("Adding the article to my list")
     public void addArticleToMyList (String name_of_folder){
         this.waitForElementAndClick(
                 OPTIONS_BUTTON,
@@ -102,6 +108,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    @Step("Adding the article to my saved articles")
     public void addAnotherArticleToMyList(String substring) {
         this.waitForElementAndClick(
                 OPTIONS_BUTTON,
@@ -116,6 +123,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
 
         String search_name_folder_xpath = getResultSearchElement(substring);
+        screenshot(this.takeScreenshot("result_search"));
         this.waitForElementAndClick(
                 search_name_folder_xpath,
                 "Cannot find " + substring + "folder",
@@ -123,6 +131,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    @Step("Removing the article from saved if it has been added")
     public void addArticlesToMySaved() {
         if (Platform.getInstance().isMW()) {
             this.removeArticleFromSavedIfItAdded();

@@ -1,4 +1,5 @@
-import io.appium.java_client.TouchAction;
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -8,13 +9,8 @@ import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-
-
+@Epic("Tests for my list")
 public class HomeWork4_5 extends CoreTestCase {
     private static final String name_of_folder = "Learning programming for automation";
     private static final String
@@ -22,6 +18,11 @@ public class HomeWork4_5 extends CoreTestCase {
             password = "!2wsxzaQ";
 
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article"), @Feature(value = "My List")})
+    @DisplayName("Test search articles and added to my saved list")
+    @Description("Test open 2 articles and added to my saved list")
+    @Step("Starting test save two articles to my list")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveTwoArticlesToMyList() throws InterruptedException {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();

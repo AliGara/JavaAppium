@@ -1,6 +1,7 @@
 package lib;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import junit.framework.TestCase;
 import lib.ui.WelcomePageObject;
 import org.junit.After;
@@ -8,7 +9,9 @@ import org.junit.Before;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.FileOutputStream;
 import java.time.Duration;
+import java.util.Properties;
 
 public class CoreTestCase {
 
@@ -16,19 +19,23 @@ public class CoreTestCase {
 
 
     @Before // Показываем, что перегружаем родительский метод setUp
+    @Step("Run driver and session")
     public void setUp() throws Exception {
 
         driver = Platform.getInstance().getDriver();
+        this.createAllurePropertyFile();
         this.rotateScreenPortrait();
         this.skipWelcomePageForIOSApp();
         this.openWikiWebPageForMobileWeb();
     }
 
     @After // Показываем, что перегружаем родительский метод tearDown
+    @Step("Remove driver and session")
     public void tearDown () {
         driver.quit();
     }
 
+    @Step("Rotate screen portrait mode")
     protected void rotateScreenPortrait() {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -39,6 +46,7 @@ public class CoreTestCase {
 
     }
 
+    @Step("Rotate screen landscape mode")
     protected void rotateScreenLandscape() {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -48,6 +56,7 @@ public class CoreTestCase {
         }
     }
 
+    @Step("Send mobile app to background")
     protected void backgroundApp(int seconds) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -57,6 +66,7 @@ public class CoreTestCase {
         }
     }
 
+    @Step("Open Wikipedia URL for mobile Web")
     protected void openWikiWebPageForMobileWeb() {
         if(Platform.getInstance().isMW()) {
             driver.get("https://en.m.wikipedia.org");
@@ -65,6 +75,7 @@ public class CoreTestCase {
         }
     }
 
+    @Step("Skip welcome page screen for iOS")
     private void skipWelcomePageForIOSApp() {
         if (Platform.getInstance().isIOS()) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -73,5 +84,18 @@ public class CoreTestCase {
         }
     }
 
+    private void createAllurePropertyFile(){
+        String path = System.getProperty("allure.results.directory"); //Из свойств проекта получаем путь до allure
+        try{
+            Properties props = new Properties();
+            FileOutputStream fos = new FileOutputStream(path + "/environment.properties"); // Получаем текущее расположение проекта и записываем в указанный файл
+            props.setProperty("Environment", Platform.getInstance().getPlatformVar()); // Получаем текущее положение переменной окружения
+            props.store(fos, "See https://github.com/../Environment");
+            fos.close();
+        } catch (Exception e) {
+            System.err.println("IO problem when writing allure properties file");
+            e.printStackTrace();
+        }
+    }
 }
 
